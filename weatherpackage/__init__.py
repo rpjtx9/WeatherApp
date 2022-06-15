@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 import os
+import sqlite3
 
 def create_app(test_config = None):
     # Create the app, configure the secret key and tell Flask that config files are relative to the instance folder
@@ -20,9 +21,8 @@ def create_app(test_config = None):
     app.config["SESSION_TYPE"] = "filesystem"
 
 
+
     # Homepage
     @app.route("/")
     def index():
         return render_template("index.html")
-
-    return app
