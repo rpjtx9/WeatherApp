@@ -1,0 +1,6 @@
+# Ignore compiled code/pycache
+*.pyc
+__pycache__/
+
+# Ignore session stuff
+flask_session/
