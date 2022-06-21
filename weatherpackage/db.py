@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Table,  Column, Integer, String, MetaData, ForeignKey, create_engine
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -12,22 +12,21 @@ import os
 def get_db():
     """Get the SQLAlchemy database object"""
     if 'db' not in g:
-        # Pass the application into SQLAlchemy object to create it
-        g.db = SQLAlchemy(current_app)
+        g.engine = create_engine("sqlite:///"+os.path.join(current_app.instance_path, "weather.db"))
+        g.db = g.engine.connect()
     return g.db
 
 def init_db():
     """Command that will be executed via CLI due to click"""
-    db = get_db()
-    engine = db.create_engine("sqlite:///"+os.path.join(current_app.instance_path, "weather.db"),{})
-    meta = db.MetaData()
+    engine = create_engine("sqlite:///"+os.path.join(current_app.instance_path, "weather.db"))
+    meta = MetaData()
     engine.execute("DROP TABLE IF EXISTS users;")
-    users = db.Table(
+    users = Table(
         "users", meta,
-        db.Column("id", db.Integer, primary_key = True),
-        db.Column("username", db.String, unique = True, nullable = False),
-        db.Column("password_hashed", db.String, nullable = False),
-        db.Column("username_check", db.String, nullable = False)
+        Column("id", Integer, primary_key = True),
+        Column("username", String, unique = True, nullable = False),
+        Column("password_hashed", String, nullable = False),
+        Column("username_check", String, nullable = False)
     )
     meta.create_all(engine)
 

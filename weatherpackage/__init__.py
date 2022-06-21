@@ -1,8 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 import os
-import sqlite3
-from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
 
 def create_app(test_config = None):
     # Create the app, configure the secret key and tell Flask that config files are relative to the instance folder.
@@ -10,10 +9,7 @@ def create_app(test_config = None):
     app = Flask(__name__, instance_relative_config = True)
     app.config.from_mapping(
         SECRET_KEY = "dev",
-        SQLALCHEMY_DATABASE_URI = "sqlite:///"+os.path.join(app.instance_path, "weather.db"),
-        SQLALCHEMY_ECHO = True,
-        # Track modifications set to false as it is unneeded and flask throws a warning every time you start it up otherwise. If you want to use the event system for Flask-SQLAlchemy then this will need to be True.
-        SQLALCHEMY_TRACK_MODIFICATIONS = False
+        DATABASE = "sqlite:///"+os.path.join(app.instance_path, "weather.db")
     )
 
     # Check for test configurations
