@@ -7,3 +7,9 @@ flask_session/
 
 #ignore my startupcommands file
 startupcommands.txt
+
+#ignore big favicon
+weather_favicon_cropped.png
+
+#ignore debug launch json
+.vscode/

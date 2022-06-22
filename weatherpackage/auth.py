@@ -46,14 +46,23 @@ def register():
                 )
                 # Check for duplicate username (username check will catch for case nonsense)
             except exc.IntegrityError:
-                error = f"User {username} is already registered."
-        # Otherwise flash the relevent error on screen and refresh the page
+                error = f"The username '{username}' is already registered. Please try a different username"
+                flash(error, "error")
+                return redirect(url_for("auth.register"))
+        # Login the user if registration was successful
+            user = db.execute(
+                text("SELECT * FROM users WHERE username = :name").bindparams(name = username)
+            ).fetchone()
+            session.clear()
+            session["user_id"] = user["id"]
+            flash("Registration successful!", "success")
+            return redirect(url_for('home'))
+        # If registration failed for any reason flash the relevant error and refresh the page
         else:
-            flash(error)
-            return redirect(url_for("auth.login"))
+            flash(error, "error")
+            return redirect(url_for("auth.register"))
 
    # Load page for GET requests
-
     return render_template("auth/register.html")
 
 #Create the Login  View
@@ -69,7 +78,7 @@ def login():
         db = get_db()
 
         user = db.execute(
-            text("SELECT * FROM users WHERE username = :name").bindparams(name = username,)
+            text("SELECT * FROM users WHERE username = :name").bindparams(name = username)
         ).fetchone()
 
         if user is None:
@@ -80,9 +89,9 @@ def login():
         if error is None:
             session.clear()
             session["user_id"] = user["id"]
-            return redirect(url_for('index'))
+            return redirect(url_for('home'))
 
-        flash(error)
+        flash(error, "error")
 
     return render_template('auth/login.html')
 
@@ -90,7 +99,7 @@ def login():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 # Creating a decorator that requires login
 def login_required(view):

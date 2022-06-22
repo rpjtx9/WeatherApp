@@ -1,0 +1,15 @@
+/* Giving some color options to text */
+.username {
+    color: #deeff5;
+    text-decoration-line: underline;
+    font-size:large;
+}
+.custom-nav-text {
+    color:#add8e6
+}
+
+ul.navlist li {
+    margin: 0rem;
+    padding: 0rem;
+    line-height: 1.5rem;
+}

@@ -30,6 +30,11 @@ def init_db():
     )
     meta.create_all(engine)
 
+def close_db(e=None):
+    """Closes database on teardown"""
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
 
 
 
@@ -41,4 +46,5 @@ def init_db_command():
     click.echo("Initialized the database")
 
 def init_app(app):
+    app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
