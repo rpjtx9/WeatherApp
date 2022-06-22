@@ -6,6 +6,10 @@ Don't forget to change later!
 
 {% block main %}
 <div align = "center">
-<img src= "{{ url_for("static", filename = "/images/hellothere.jpeg") }}"  alt="Hello there!">
+    {% if g.user %}
+        <img src= "{{ url_for("static", filename = "/images/hellothere.jpeg") }}"  alt="Hello there!">
+    {% else %}
+        <h1> Please register or login! : ) <h1>
+    {% endif %}
 </div>
 {% endblock %}

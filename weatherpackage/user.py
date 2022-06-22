@@ -15,5 +15,5 @@ def profile():
     # For now if they manage to submit something to this just redirect 'em to the GET option
     if request.method == "POST":
         return redirect(url_for("user.profile"))
-
-    return render_template('user/profile.html')
+    else:
+        return render_template('user/profile.html')
