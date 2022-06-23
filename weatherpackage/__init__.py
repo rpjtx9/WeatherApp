@@ -3,6 +3,7 @@ from flask import (
     )
 import os
 import sqlalchemy
+from weather_data_functions import weather_lookup, WeatherInfo
 
 def create_app(test_config = None):
     # Create the app, configure the secret key and tell Flask that config files are relative to the instance folder.
@@ -35,12 +36,14 @@ def create_app(test_config = None):
         if request.method == "POST":
             redirect(url_for("home"))
         else:
-            return render_template("home.html")
+            weather = weather_lookup(38.7809, -90.7884)
+            return render_template("home.html", weather=weather)
 
     
     # Register the database with the factory function
     from . import db
     db.init_app(app)
+
 
     # Register the authentication  blueprint with the factory function
     from . import auth

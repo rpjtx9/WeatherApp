@@ -5,6 +5,7 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 from weatherpackage.db import get_db
 from sqlalchemy import text, exc
+from weather_data_functions import weather_lookup, WeatherInfo
 
 bp = Blueprint("user", __name__, url_prefix = "/user")
 

@@ -7,7 +7,7 @@ Don't forget to change later!
 {% block main %}
 <div align = "center">
     {% if g.user %}
-        <img src= "{{ url_for("static", filename = "/images/hellothere.jpeg") }}"  alt="Hello there!">
+        Right now it's {{ weather.current.temp }}°F and it feels like {{ weather.current.feels_like }}°F. The conditions are {{ weather.current.weather[0].main }}
     {% else %}
         <h1> Please register or login! : ) <h1>
     {% endif %}
