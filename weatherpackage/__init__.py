@@ -3,7 +3,7 @@ from flask import (
     )
 import os
 import sqlalchemy
-from weather_data_functions import weather_lookup, WeatherInfo
+from weather_data_functions import weather_lookup, WeatherInfo, geocode
 
 def create_app(test_config = None):
     # Create the app, configure the secret key and tell Flask that config files are relative to the instance folder.
@@ -52,5 +52,8 @@ def create_app(test_config = None):
     # Register the user blueprint with factory
     from . import user
     app.register_blueprint(user.bp)
+
+
+
 
     return app
