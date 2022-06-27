@@ -13,3 +13,6 @@ weather_favicon_cropped.png
 
 #ignore debug launch json
 .vscode/
+
+#ignore any .db files
+*.db
