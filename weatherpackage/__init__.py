@@ -1,9 +1,11 @@
 from flask import (
-    Flask, flash, redirect, render_template, request, session, url_for
+    Flask, flash, redirect, render_template, request, session, url_for, g
     )
 import os
 import sqlalchemy
+from sqlalchemy import text
 from weather_data_functions import weather_lookup, WeatherInfo, geocode
+from weatherpackage.db import get_db
 
 def create_app(test_config = None):
     # Create the app, configure the secret key and tell Flask that config files are relative to the instance folder.
@@ -36,8 +38,21 @@ def create_app(test_config = None):
         if request.method == "POST":
             redirect(url_for("home"))
         else:
-            weather = weather_lookup(38.7809, -90.7884)
-            return render_template("home.html", weather=weather)
+            user_id = session.get("user_id")
+            if user_id is None:
+                g.user = None
+            else:
+                db = get_db()
+                g.user = db.execute(text(
+                    "SELECT * FROM users WHERE id = :id").bindparams( id = user_id,
+                )).fetchone()
+            if g.user: 
+                lat = g.user.home_city_lat
+                lng = g.user.home_city_lng
+                weather = weather_lookup(lat, lng)
+                return render_template("home.html", weather=weather)
+            else:
+                return render_template("home.html")
 
     
     # Register the database with the factory function

@@ -26,15 +26,16 @@ def init_db():
     meta = MetaData()
     # Wipe existing database if it already exists
     engine.execute("DROP TABLE IF EXISTS users;")
-    # Create users table. Home city is foreign key to geonameid in cities table
+    # Create users table. 
     users = Table(
         "users", meta,
         Column("id", Integer, primary_key = True),
         Column("username", String, unique = True, nullable = False),
         Column("password_hashed", String, nullable = False),
         Column("home_city_lat", FLOAT),
-        Column("home_city_long", FLOAT),
-        Column("home_city_zip", FLOAT),
+        Column("home_city_lng", FLOAT),
+        Column("home_city_zip", Integer),
+        Column("home_city_name", String),
         Column("email_add", String, unique= True)
     )
     meta.create_all(engine)

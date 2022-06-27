@@ -22,6 +22,22 @@ class WeatherInfo:
             else:
                 setattr(self, key, val)
 
+class LocationInfo:
+    @staticmethod
+    def map_entry(entry):
+        if isinstance(entry, dict):
+            return LocationInfo(**entry)
+        return entry
+    def __init__(self, **kwargs):
+        for key, val in kwargs.items():
+            if type(val) == dict:
+                setattr(self, key, LocationInfo(**val))
+            elif type(val) == list:
+                setattr(self, key, list(map(self.map_entry, val)))
+            else:
+                setattr(self, key, val)
+
+
 def weather_lookup(lat, lng, units="imperial"):
     """Takes the latitude and longitude of a location and returns weather data at that location. Defaults to imperial units, standard and metric are alternative options"""
     # Call the API
@@ -41,12 +57,12 @@ def weather_lookup(lat, lng, units="imperial"):
 
     except (KeyError, TypeError, ValueError):
         return None
-def geocode(zip_code):
+def geocode(zipcode):
     """Takes address information (only zip code for now) and returns a dictionary of latitude and longitude for the location as lat and lng"""
     # Call API
     try:
         api_key = os.environ.get("GEOCODE_API_KEY")
-        url=f"https://maps.googleapis.com/maps/api/geocode/json?address={zip_code}&key={api_key}"
+        url=f"https://maps.googleapis.com/maps/api/geocode/json?address={zipcode}&key={api_key}"
         response = requests.get(url)
         response.raise_for_status()
     except requests.RequestException:
@@ -54,7 +70,8 @@ def geocode(zip_code):
     
     # Parse out json and return latitude and longitude
     try:
-        location_data = response.json()
-        return location_data["results"][0]["geometry"]["location"]
+        rawdata = response.json()
+        location = LocationInfo(**rawdata)
+        return location
     except (KeyError, TypeError, ValueError):
         return None

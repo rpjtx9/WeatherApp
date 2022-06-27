@@ -42,9 +42,9 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    text("INSERT INTO users (username, password_hashed, username_check) VALUES (:name, :hashedpass, :check)").bindparams(name = username, hashedpass = generate_password_hash(password), check = username.lower())
+                    text("INSERT INTO users (username, password_hashed) VALUES (:name, :hashedpass)").bindparams(name = username, hashedpass = generate_password_hash(password))
                 )
-                # Check for duplicate username (username check will catch for case nonsense)
+                # Check for duplicate username 
             except exc.IntegrityError:
                 error = f"The username '{username}' is already registered. Please try a different username"
                 flash(error, "error")

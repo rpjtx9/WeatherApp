@@ -5,9 +5,23 @@ Don't forget to change later!
 {% endblock %}
 
 {% block main %}
-<div align = "center">
+<div align= center>
     {% if g.user %}
-        Right now it's {{ weather.current.temp }}°F and it feels like {{ weather.current.feels_like }}°F. The conditions are {{ weather.current.weather[0].main }}
+        {% if g.user["home_city_name"] %}
+        Current conditions for {{ g.user["home_city_name"] }}
+            <table class = "table table-bordered w-auto">
+                <tr>
+                    <th>Current Temp: </th> <td> {{ weather.current.temp|round|int }}°F</td>
+                </tr>
+                <tr>
+                    <th> Feels Like: </th> <td> {{ weather.current.feels_like|round|int }}°F </td>
+                </tr>
+                <tr>
+                    <th> Conditions: </th> <td> {{ weather.current.weather[0].main }} </td>
+                </tr>
+        {% else %}
+            <h1> Please go to your <a href = "{{ url_for('user.profile') }}">profile</a> and set a home city for current weather information  </h1>
+        {% endif %}
     {% else %}
         <h1> Please register or login! : ) <h1>
     {% endif %}
