@@ -1,0 +1,3 @@
+graft weatherpackage/static
+graft weatherpackage/templates
+global-exclude *.pyc

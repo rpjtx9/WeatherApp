@@ -16,3 +16,9 @@ weather_favicon_cropped.png
 
 #ignore any .db files
 *.db
+
+#ignore .env
+*.env
+
+#ignore config file
+config.py

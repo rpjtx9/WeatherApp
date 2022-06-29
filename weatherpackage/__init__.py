@@ -12,7 +12,6 @@ def create_app(test_config = None):
     # Set database to weather.db which will be created on first run.
     app = Flask(__name__, instance_relative_config = True)
     app.config.from_mapping(
-        SECRET_KEY = "dev",
         DATABASE = "sqlite:///"+os.path.join(app.instance_path, "weather.db"),
         DEBUG = True
     )
@@ -46,7 +45,7 @@ def create_app(test_config = None):
                 g.user = db.execute(text(
                     "SELECT * FROM users WHERE id = :id").bindparams( id = user_id,
                 )).fetchone()
-            if g.user: 
+            if g.user:
                 lat = g.user.home_city_lat
                 lng = g.user.home_city_lng
                 weather = weather_lookup(lat, lng)
@@ -54,7 +53,7 @@ def create_app(test_config = None):
             else:
                 return render_template("home.html")
 
-    
+
     # Register the database with the factory function
     from . import db
     db.init_app(app)
